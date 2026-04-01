@@ -2,21 +2,25 @@ import { useAtom } from "jotai";
 import { favouritesAtom } from "@/store";
 import { Row, Col, Button } from "react-bootstrap";
 import { useEffect, useState } from "react";
+import { addToFavourites, removeFromFavourites } from "@/services/userData"; // API functions to update favourites in backend
 
 export default function BookDetails({ book, workId, showFavouriteBtn = true }) {
   const [favouritesList, setFavouritesList] = useAtom(favouritesAtom);
   const [showAdded, setShowAdded] = useState(false);
 
-  // update showAdded when favouritesList changes
+  // Update showAdded state whenever favouritesList changes
   useEffect(() => {
     setShowAdded(favouritesList?.includes(workId));
   }, [favouritesList, workId]);
 
-  const favouritesClicked = () => {
+  // Handle favourite button click asynchronously
+  const favouritesClicked = async () => {
     if (showAdded) {
-      setFavouritesList((current) => current.filter((fav) => fav !== workId));
+      // Remove from favourites via API
+      setFavouritesList(await removeFromFavourites(workId));
     } else {
-      setFavouritesList((current) => [...current, workId]);
+      // Add to favourites via API
+      setFavouritesList(await addToFavourites(workId));
     }
   };
 
@@ -27,7 +31,7 @@ export default function BookDetails({ book, workId, showFavouriteBtn = true }) {
           src={book.covers ? `https://covers.openlibrary.org/b/id/${book.covers[0]}-L.jpg` : "/no_image.png"}
           alt={book.title || "No title"}
           className="img-fluid"
-          onError={(e) => { e.target.src = "/no_image.png"; }}
+          onError={(e) => { e.target.src = "/no_image.png"; }} // Fallback if image fails
         />
       </Col>
 
