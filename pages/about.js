@@ -16,24 +16,22 @@ export async function getStaticProps() {
 
 export default function About(props) {
   return (
-    <>
+    <div style={{ paddingTop: "70px" }}> {/* Reserve space for fixed Navbar */}
       <PageHeader text="About the Developer - Kasen Tei" />
 
-      <Card>
+      <Card className="mb-3">
         <Card.Body>
           <p>
             Hi, this is Kasen Tei. I am currently studying web development and
             learning how to build applications using React and Next.js.
           </p>
           <p>
-            Let me show you some thing.
+            Let me show you some things.
           </p>
         </Card.Body>
       </Card>
 
-      <br />
-
       <BookDetails book={props.book} />
-    </>
+    </div>
   );
 }
