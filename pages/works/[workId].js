@@ -8,12 +8,13 @@ export default function WorkPage() {
   const router = useRouter();
   const { workId } = router.query;
 
-  if (!workId) return <div>Loading...</div>;
+  // Always call hook at top level, even if workId is undefined
+  const { data, error } = useSWR(
+    workId ? `https://openlibrary.org/works/${workId}.json` : null
+  );
 
-  const { data, error } = useSWR(`https://openlibrary.org/works/${workId}.json`);
-
+  if (!workId || !data) return <div>Loading...</div>;
   if (error) return <Error statusCode={404} />;
-  if (!data) return <div>Loading...</div>;
 
   return (
     <Container className="mt-4">

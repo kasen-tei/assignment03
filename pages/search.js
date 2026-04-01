@@ -16,7 +16,7 @@ export default function Search() {
 
   // fetch data when page or searchAuthor changes
   useEffect(() => {
-    if (!searchAuthor) return; // check if author is leagal
+    if (!searchAuthor) return; // check if author is legal
     setLoading(true);
 
     async function fetchData() {
@@ -82,7 +82,7 @@ export default function Search() {
                   key={book.key}
                   onClick={() => router.push(`/works/${book.key.split('/').pop()}`)} // navigate to work detail
                 >
-                  <td>{book.title}</td>
+                  <td>{book.title.replace(/"/g, "&quot;")}</td>
                   <td>{book.first_publish_year || 'N/A'}</td>
                 </tr>
               ))}
@@ -98,7 +98,7 @@ export default function Search() {
       )}
 
       {!loading && searchAuthor && pageData.length === 0 && (
-        <p>No results found for "{searchAuthor}".</p>
+        <p>No results found for &quot;{searchAuthor}&quot;.</p>
       )}
     </>
   );
